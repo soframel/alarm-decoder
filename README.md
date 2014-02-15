@@ -1,1 +1,1 @@
-This file was created by IntelliJ IDEA 12.1.6 for binding GitHub repository
+This is a very first draft of a simple android app, that will allow me to decode "encoded" SMSs sent by my alarm system, in order to display in clear text which captor is having a problem. 
