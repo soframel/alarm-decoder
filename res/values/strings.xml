@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Alarm decoder</string>
+    <string name="action_settings">Settings</string>
+    <string name="pref_callingNumber">Calling number:</string>
+    <string name="display_callingNumber">Displaying SMSs from </string>
+    <string name="pref_labels_title">Sensors Labels</string>
+    <string name="pref_mapping">label:</string>
+    <string name="pref_mapping_key">Sensor Code:</string>
+    <string name="pref_mapping_value">Sensor name:</string>
+</resources>
