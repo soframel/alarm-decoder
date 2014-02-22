@@ -5,7 +5,7 @@
     <string name="pref_callingNumber">Calling number:</string>
     <string name="display_callingNumber">Displaying SMSs from </string>
     <string name="pref_labels_title">Sensors Labels</string>
-    <string name="pref_mapping">label:</string>
+    <string name="pref_mapping">label</string>
     <string name="pref_mapping_key">Sensor Code:</string>
     <string name="pref_mapping_value">Sensor name:</string>
 </resources>

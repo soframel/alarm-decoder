@@ -7,9 +7,6 @@
     <PreferenceCategory
             android:title="@string/pref_labels_title"
             android:key="pref_key_storage_settings">
-        <org.soframel.alarm.decoder.settings.EditKeyValueTextPreference android:key="mapping1"
-                                                                        android:title="@string/pref_mapping"
-                />
 
     </PreferenceCategory>
 
