@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.soframel.alarm.decoder.settings.SettingsActivity;
 
@@ -32,10 +34,30 @@ public class AlarmDecoderActivity extends Activity {
     }
 
     public void displaySMSs(){
+        LinearLayout layout=(LinearLayout) this.findViewById(R.id.MainScreenLayout);
+
         //show number
         TextView view= (TextView) this.findViewById(R.id.callingNumberText);
         view.setText(this.getResources().getString(R.string.display_callingNumber)+" "+callingNumber);
         view.invalidate();
+
+        //show SMSs
+
+        //show date of sms
+        TextView dateTV=new TextView(this.getApplicationContext());
+        dateTV.setText("25/02/2014 08:43 :");
+        layout.addView(dateTV);
+
+        //TODO: load real SMSs from SMSManager
+        TextView sms=(TextView) this.getLayoutInflater().inflate(R.layout.smssummary, null);
+        sms.setText("ALR: 51456f 5s1f53ds15f1d 5f5dsg  5fg5f45g 4f5dg EXAMPLE SMS");
+        layout.addView(sms);
+    }
+
+    public void displaySMS(View view){
+       TextView sms=(TextView) view;
+       Log.d(TAG, "SMS clicked: "+sms.getText());
+        //TODO: show SMS decoding intent
     }
 
     @Override
