@@ -7,7 +7,7 @@
     <PreferenceCategory
             android:title="@string/pref_labels_title"
             android:key="pref_key_storage_settings">
-
+           <!-- label preferences are added dynamically -->
     </PreferenceCategory>
 
 </PreferenceScreen>

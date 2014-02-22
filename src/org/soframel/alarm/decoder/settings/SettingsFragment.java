@@ -177,11 +177,7 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
         button.setText(BUTTON_REMOVETEXT);
         button.setOnClickListener(this);
         minusViews.put(i, button);
-
-        /*if(i>1)
-            buttonsLayout.addView(button, buttonsLayout.getChildCount()-2);
-        else
-            buttonsLayout.addView(button);*/
+        //add button at right position (starting at 1, 0 = filler view)
         buttonsLayout.addView(button, i);
     }
 
