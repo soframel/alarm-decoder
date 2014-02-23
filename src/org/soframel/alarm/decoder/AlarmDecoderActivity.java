@@ -1,12 +1,14 @@
 package org.soframel.alarm.decoder;
 
-import android.preference.Preference;
-import android.util.Log;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +16,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.soframel.alarm.decoder.settings.SettingsActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AlarmDecoderActivity extends Activity {
 
     public final static String TAG="AlarmDecoderActivity";
+
+    private final static String SMS_URI_INBOX="content://sms/inbox";
+    private static SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private static Uri uri = Uri.parse(SMS_URI_INBOX);
 
     //preferences values
     private String callingNumber;
@@ -41,23 +50,57 @@ public class AlarmDecoderActivity extends Activity {
         view.setText(this.getResources().getString(R.string.display_callingNumber)+" "+callingNumber);
         view.invalidate();
 
-        //show SMSs
+        if(callingNumber!=null && !callingNumber.equals("")){
+            //show SMSs
+            String[] cols=new String[2];
+            cols[0]="body";
+            cols[1]="date";
 
-        //show date of sms
+            Cursor cur=this.getContentResolver().query(uri, cols, "address="+callingNumber, null, "date desc");
+            if (cur.moveToFirst()) {
+                int index_Body = cur.getColumnIndex("body");
+                int index_Date = cur.getColumnIndex("date");
+                do {
+                    String body = cur.getString(index_Body);
+                    long time=cur.getLong(index_Date);
+
+                    //show date of sms
+                    TextView dateTV=new TextView(this.getApplicationContext());
+                    dateTV.setTextColor(Color.parseColor("#4A4A4A"));
+                    Date date=new Date(time);
+                    dateTV.setText(dateFormat.format(date)+" :");
+                    layout.addView(dateTV);
+
+                    //SMS
+                    TextView sms=(TextView) this.getLayoutInflater().inflate(R.layout.smssummary, null);
+                    sms.setText(body);
+                    layout.addView(sms);
+
+                } while (cur.moveToNext());
+
+                if (!cur.isClosed()) {
+                    cur.close();
+                }
+            }
+        }
+
+            //Example SMS
+        /*//show date of sms
         TextView dateTV=new TextView(this.getApplicationContext());
         dateTV.setText("25/02/2014 08:43 :");
         layout.addView(dateTV);
-
-        //TODO: load real SMSs from SMSManager
         TextView sms=(TextView) this.getLayoutInflater().inflate(R.layout.smssummary, null);
         sms.setText("ALR: 51456f 5s1f53ds15f1d 5f5dsg  5fg5f45g 4f5dg EXAMPLE SMS");
-        layout.addView(sms);
+        layout.addView(sms);     */
     }
 
     public void displaySMS(View view){
        TextView sms=(TextView) view;
        Log.d(TAG, "SMS clicked: "+sms.getText());
-        //TODO: show SMS decoding intent
+
+       Intent intent = new Intent(this, SMSDecoderActivity.class);
+       intent.putExtra(SMSDecoderActivity.SMS_CONTENT_PARAM, sms.getText().toString());
+       this.startActivity(intent);
     }
 
     @Override
