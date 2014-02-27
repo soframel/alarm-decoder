@@ -17,11 +17,16 @@ import android.widget.TextView;
 import org.soframel.alarm.decoder.settings.SettingsActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AlarmDecoderActivity extends Activity {
 
     public final static String TAG="AlarmDecoderActivity";
+
+    private final static int NB_MAX_SMS=20;
+    private final static int NB_MAX_SMS_TO_PARSE=1000;
 
     private final static String SMS_URI_INBOX="content://sms/inbox";
     private static SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -29,6 +34,8 @@ public class AlarmDecoderActivity extends Activity {
 
     //preferences values
     private String callingNumber;
+
+    private List<View> smsViews;
 
     /**
      * Called when the activity is first created.
@@ -42,41 +49,82 @@ public class AlarmDecoderActivity extends Activity {
         this.displaySMSs();
     }
 
+    @Override
+    protected void onRestart() {
+        this.reload();
+        super.onRestart();
+    }
+
+    /**
+     * Remove shown SMSs, load settings and load SMSs
+     */
+    public void reload(){
+        //Remove already showed smsViews
+        LinearLayout layout=(LinearLayout) this.findViewById(R.id.MainScreenLayout);
+        for(View v: smsViews){
+             layout.removeView(v);
+        }
+
+        this.loadSettings();
+        this.displaySMSs();
+    }
+
     public void displaySMSs(){
         LinearLayout layout=(LinearLayout) this.findViewById(R.id.MainScreenLayout);
+
+        callingNumber=callingNumber.trim();
 
         //show number
         TextView view= (TextView) this.findViewById(R.id.callingNumberText);
         view.setText(this.getResources().getString(R.string.display_callingNumber)+" "+callingNumber);
         view.invalidate();
 
+        smsViews =new ArrayList<View>();
+
         if(callingNumber!=null && !callingNumber.equals("")){
-            //show SMSs
-            String[] cols=new String[2];
+            //show smsViews
+            String[] cols=new String[3];
             cols[0]="body";
             cols[1]="date";
+            cols[2]="address";
 
-            Cursor cur=this.getContentResolver().query(uri, cols, "address="+callingNumber, null, "date desc");
+            //Query by address does not work on Nexus5 ! -> query all and filter after...
+            //Cursor cur=this.getContentResolver().query(uri, cols, "address="+callingNumber, null, "date desc");
+            Cursor cur=this.getContentResolver().query(uri, cols, null, null, "date desc");
             if (cur.moveToFirst()) {
                 int index_Body = cur.getColumnIndex("body");
                 int index_Date = cur.getColumnIndex("date");
+                int index_address=cur.getColumnIndex("address");
+                int foundSMSs=0;
+                int parsedSMSs=0;
                 do {
                     String body = cur.getString(index_Body);
                     long time=cur.getLong(index_Date);
+                    String address=cur.getString(index_address);
 
-                    //show date of sms
-                    TextView dateTV=new TextView(this.getApplicationContext());
-                    dateTV.setTextColor(Color.parseColor("#4A4A4A"));
-                    Date date=new Date(time);
-                    dateTV.setText(dateFormat.format(date)+" :");
-                    layout.addView(dateTV);
+                    if(address!=null && address.trim().equals(callingNumber)){
 
-                    //SMS
-                    TextView sms=(TextView) this.getLayoutInflater().inflate(R.layout.smssummary, null);
-                    sms.setText(body);
-                    layout.addView(sms);
+                        Log.d(TAG, "SMS Found: "+body) ;
 
-                } while (cur.moveToNext());
+                        //show date of sms
+                        TextView dateTV=new TextView(this.getApplicationContext());
+                        dateTV.setTextColor(Color.parseColor("#4A4A4A"));
+                        Date date=new Date(time);
+                        dateTV.setText(dateFormat.format(date)+" :");
+                        layout.addView(dateTV);
+                        smsViews.add(dateTV);
+
+                        //SMS
+                        TextView sms=(TextView) this.getLayoutInflater().inflate(R.layout.smssummary, null);
+                        sms.setText(body);
+                        layout.addView(sms);
+                        smsViews.add(sms);
+
+                        foundSMSs++;
+
+                    }
+                    parsedSMSs++;
+                } while (cur.moveToNext() && foundSMSs<NB_MAX_SMS && parsedSMSs<NB_MAX_SMS_TO_PARSE);
 
                 if (!cur.isClosed()) {
                     cur.close();

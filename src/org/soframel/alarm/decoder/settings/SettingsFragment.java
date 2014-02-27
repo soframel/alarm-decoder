@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceGroup;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -28,6 +30,7 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
     private LinearLayout layout;
     private LinearLayout buttonsLayout;
     private SharedPreferences sharedPrefs;
+    private PreferenceGroup pg;
 
     private Map<Integer, View> minusViews;
     private Button addLabelButton;
@@ -39,8 +42,7 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
 
-        //buttonsFragment=new RemoveButtonsFragment(this);
-        //getFragmentManager().beginTransaction().replace(android.R.id.content,buttonsFragment).commit();
+        pg = (PreferenceGroup) getPreferenceScreen().findPreference("pref_key_storage_settings");
     }
 
     @Override
@@ -179,9 +181,12 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
         minusViews.put(i, button);
         //add button at right position (starting at 1, 0 = filler view)
         buttonsLayout.addView(button, i);
+
     }
 
     private void removeLabel(int i){
+        SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+        SharedPreferences.Editor editor=sharedPreferences.edit();
 
         Preference pref=this.getPreferenceScreen().findPreference("mapping"+i);
         if(pref!=null){
@@ -199,10 +204,17 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
         for(int j=i+1;j<=this.getNbLabels();j++){
               //switch preference
             int newJ=j-1;
-            Preference otherPref=this.getPreferenceScreen().findPreference("mapping"+j);
+            String oldKey="mapping"+j;
+            String newKey= "mapping"+newJ;
+            Preference otherPref=this.getPreferenceScreen().findPreference(oldKey);
             if(otherPref!=null){
-                otherPref.setKey("mapping"+newJ);
+                //change key and title
+                otherPref.setKey(newKey);
                 otherPref.setTitle(this.getLabelTitle(newJ));
+
+                //also set value
+                String existingPref=sharedPrefs.getString(oldKey, null);
+                editor.putString(newKey, existingPref);
             }
 
             //switch remove button
@@ -214,7 +226,36 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
             }
         }
         this.buttonsNeedTranslation=true;
+        editor.commit();
     }
+
+    /*private void save()
+    {
+        SharedPreferences sharedPreferences;
+        SharedPreferences.Editor editor;
+        Preference preference;
+        int keyCount;
+
+        if (null != pg)
+        {
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+            if (null != sharedPreferences)
+            {
+                editor = sharedPreferences.edit();
+                keyCount = pg.getPreferenceCount();
+                // editor.putInt("keyCount", keyCount);
+                // editor.putInt("counter", counter);
+                for (int i = 0; i < keyCount; i++)
+                {
+                    preference = pg.getPreference(i);
+                    editor.putString(preference.getKey(), preference.getTitle().toString());
+                }
+                // Save to file
+                // *** commit() will block caller thread ***
+                editor.commit();
+            }
+        }
+    }*/
 
     public int getNbLabels(){
         return sharedPrefs.getInt(KEY_NBLABELS, 0);
