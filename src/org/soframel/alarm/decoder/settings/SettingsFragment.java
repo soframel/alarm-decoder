@@ -18,8 +18,7 @@ import java.util.Map;
  * User: sophie
  * Date: 8/2/14
  */
-public class SettingsFragment extends PreferenceFragment implements View.OnClickListener{
-    //, ViewTreeObserver.OnGlobalLayoutListener
+public class SettingsFragment extends PreferenceFragment implements View.OnClickListener, ViewTreeObserver.OnGlobalLayoutListener{
 
     public final static String TAG="SettingsFragment";
 
@@ -34,6 +33,7 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
 
     private Map<Integer, View> minusViews;
     private Button addLabelButton;
+    private View filler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
-        //layout.getViewTreeObserver().addOnGlobalLayoutListener(this);
+        layout.getViewTreeObserver().addOnGlobalLayoutListener(this);
 
         sharedPrefs=this.getPreferenceManager().getSharedPreferences();
 
@@ -73,7 +73,7 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
         minusViews =new HashMap<Integer, View>();
 
         //filler
-        View filler=new View(this.getActivity().getApplicationContext());
+        filler=new View(this.getActivity().getApplicationContext());
         LinearLayout.LayoutParams fillerParams = new LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.MATCH_PARENT);
@@ -107,15 +107,39 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
 
     private boolean buttonsNeedTranslation=true;
 
-    /*@Override
+    @Override
     public void onGlobalLayout() {
               if(buttonsNeedTranslation){
-                  this.translateMinusButtons();
+                  //set filler size
+                  float height=this.findFillerHeight();
+                  Float h=new Float(height);
+                  filler.getLayoutParams().height=h.intValue();
+                  filler.invalidate();
+
+                  //this.translateMinusButtons();
                   buttonsNeedTranslation=false;
               }
     }
 
-   private void translateMinusButtons(){
+    protected float findFillerHeight(){
+        float height=0;
+
+        View child=layout.getChildAt(0);
+        if(child!=null && child instanceof ListView){
+            ListView prefsView=(ListView) child;
+            if(prefsView.getChildCount()>1){
+                View labelsTitle=prefsView.getChildAt(1);
+                if(labelsTitle!=null){
+                    height=labelsTitle.getY()+labelsTitle.getHeight();
+                }
+            }
+
+        }
+
+        return height;
+    }
+
+   /*private void translateMinusButtons(){
         for(Integer i: minusViews.keySet()){
             View minusView= minusViews.get(i);
             float targetY=this.findPreferenceY(i);
@@ -142,9 +166,8 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
             }
 
         }
-
         return z;
-    }      */
+    } */
 
     private String getLabelTitle(int i){
          return getResources().getString(R.string.pref_mapping)+" "+i+":";
@@ -228,34 +251,6 @@ public class SettingsFragment extends PreferenceFragment implements View.OnClick
         this.buttonsNeedTranslation=true;
         editor.commit();
     }
-
-    /*private void save()
-    {
-        SharedPreferences sharedPreferences;
-        SharedPreferences.Editor editor;
-        Preference preference;
-        int keyCount;
-
-        if (null != pg)
-        {
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
-            if (null != sharedPreferences)
-            {
-                editor = sharedPreferences.edit();
-                keyCount = pg.getPreferenceCount();
-                // editor.putInt("keyCount", keyCount);
-                // editor.putInt("counter", counter);
-                for (int i = 0; i < keyCount; i++)
-                {
-                    preference = pg.getPreference(i);
-                    editor.putString(preference.getKey(), preference.getTitle().toString());
-                }
-                // Save to file
-                // *** commit() will block caller thread ***
-                editor.commit();
-            }
-        }
-    }*/
 
     public int getNbLabels(){
         return sharedPrefs.getInt(KEY_NBLABELS, 0);

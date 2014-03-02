@@ -9,4 +9,36 @@
     <string name="pref_mapping">label</string>
     <string name="pref_mapping_key">Sensor Code:</string>
     <string name="pref_mapping_value">Sensor name:</string>
+    <!-- ContactID groups -->
+    <string name="contactID_Group100">Alarme</string>
+    <string name="contactID_Group200">Monitoring</string>
+    <string name="contactID_Group300">Erreur</string>
+    <string name="contactID_Group400">Ouverture/Fermeture</string>
+    <string name="contactID_Group500">Bypass/Désactivation</string>
+    <!--ContactID codes -->
+    <string name="contactID_medical">Méd. clavier</string>
+    <string name="contactID_assistance">Téléassistance</string>
+    <string name="contactID_Fire">Incendie</string>
+    <string name="contactID_aggression">Aggression</string>
+    <string name="contactID_intrusion">Intrusion</string>
+    <string name="contactID_sabotage">Sabotage</string>
+    <string name="contactID_keyBox">Boîte clé</string>
+    <string name="contactID_powerFail">Défaut secteur</string>
+    <string name="contactID_reset">Remise à zéro</string>
+    <string name="contactID_battery">Batterie</string>
+    <string name="contactID_isdn">Ligne téléphonique</string>
+    <string name="contactID_jamming">Brouillage</string>
+    <string name="contactID_supervisionPb">Défaut supervision</string>
+    <string name="contactID_sensorBattery">Batterie émetteur</string>
+    <string name="contactID_enableDisable">Armement/Désarmement</string>
+    <string name="contactID_keyEnable">Armement clé</string>
+    <string name="contactID_download">Téléchargement réussi</string>
+    <string name="contactID_codeSabotage">Sabotage code d\'accès</string>
+    <string name="contactID_closeZone">Bloquer zone</string>
+    <string name="contactID_manualReportTrigger">Rapport trigger manuel</string>
+    <string name="contactID_scheduledReport">Rapport périodique</string>
+    <string name="contactID_dateTimeChange">Heure/jour modifié</string>
+    <string name="contactID_programmationModeStarted">Début mode programmation</string>
+    <string name="contactID_programmationModeEnded">Fin mode programmation</string>
 </resources>
+
