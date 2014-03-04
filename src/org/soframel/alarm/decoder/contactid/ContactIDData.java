@@ -18,6 +18,7 @@ public class ContactIDData {
     //decoded data
     private String eventName;
     private String groupName;
+    private String userName;
     private String zoneName;
 
     public ContactIDData(){
@@ -31,6 +32,14 @@ public class ContactIDData {
         this.zoneName = zoneName;
     }
 
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
 
 
@@ -108,7 +117,7 @@ public class ContactIDData {
 
     @Override
     public String toString() {
-        return  groupName+": "+eventKind+" "+eventName+". zone="+zoneName+", Partition="+ userID +", owner="+ownerID;
+        return  groupName+": "+eventKind+" "+eventName+". Zone: "+zoneName+", User: "+ userName +", owner: "+ownerID;
     }
 
     public static ContactIDData parseMessage(String data) throws ContactIDException{

@@ -1,6 +1,8 @@
 package org.soframel.alarm.decoder;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -148,9 +150,21 @@ public class AlarmDecoderActivity extends Activity {
        TextView sms=(TextView) view;
        Log.d(TAG, "SMS clicked: "+sms.getText());
 
-       Intent intent = new Intent(this, SMSDecoderActivity.class);
+       /*Intent intent = new Intent(this, SMSDecoderActivity.class);
        intent.putExtra(SMSDecoderActivity.SMS_CONTENT_PARAM, sms.getText().toString());
-       this.startActivity(intent);
+       this.startActivity(intent);*/
+
+        //fragment
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        SMSDecoderDialogFragment newFragment = new SMSDecoderDialogFragment(sms.getText().toString());
+        newFragment.show(ft, "dialog");
     }
 
     @Override

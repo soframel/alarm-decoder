@@ -25,6 +25,8 @@ public abstract class KeyValueMappingsPrefsActivity extends Activity {
 
     abstract public String getPreferencesName();
     abstract public String getEntryLabel();
+    abstract public int getKeyInputType();
+    abstract public int getValueInputType();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +104,12 @@ public abstract class KeyValueMappingsPrefsActivity extends Activity {
         EditText keyView=this.findEditTextUserId(entryView);
         if(keyView!=null){
             keyView.setText(key);
+            keyView.setInputType(this.getKeyInputType());
         }
         EditText valueView=this.findValueEditText(entryView);
         if(valueView!=null){
             valueView.setText(value);
+            valueView.setInputType(this.getValueInputType());
         }
 
         layout.addView(entryView, layout.getChildCount()-1);

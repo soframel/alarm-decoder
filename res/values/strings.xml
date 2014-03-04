@@ -7,8 +7,10 @@
     <string name="sensors_settings">Sensors Settings</string>
     <string name="sensors_label">Sensor:</string>
     <string name="decode_sms">Decode SMS</string>
+    <string name="decode_sms_error">Error while decoding SMS</string>
     <string name="pref_callingNumber">Calling number:</string>
     <string name="display_callingNumber">Displaying SMSs from </string>
+    <string name="close">Close</string>
     <string name="pref_labels_title">Sensors Labels</string>
     <string name="pref_mapping">label</string>
     <string name="pref_mapping_key">Sensor Code:</string>
