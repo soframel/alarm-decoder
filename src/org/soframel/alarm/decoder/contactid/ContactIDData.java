@@ -11,7 +11,7 @@ public class ContactIDData {
     private int syntax;
     private int eventKind;
     private int eventCode;
-    private int partition;
+    private int userID;
     private int zone;
     private String checksum;
 
@@ -66,12 +66,12 @@ public class ContactIDData {
         this.eventCode = eventCode;
     }
 
-    public int getPartition() {
-        return partition;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setPartition(int partition) {
-        this.partition = partition;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public int getZone() {
@@ -108,7 +108,7 @@ public class ContactIDData {
 
     @Override
     public String toString() {
-        return  groupName+": "+eventKind+" "+eventName+". zone="+zoneName+", Partition="+partition+", owner="+ownerID;
+        return  groupName+": "+eventKind+" "+eventName+". zone="+zoneName+", Partition="+ userID +", owner="+ownerID;
     }
 
     public static ContactIDData parseMessage(String data) throws ContactIDException{
@@ -122,7 +122,7 @@ public class ContactIDData {
             try{
                 owner=Integer.parseInt(ownerS);
             }catch(NumberFormatException e){
-                throw new ContactIDException("Could not parse proprietary string: "+ownerS);
+                throw new ContactIDException("Could not parse owner string: "+ownerS);
             }
             c.setOwnerID(owner);
 
@@ -153,14 +153,14 @@ public class ContactIDData {
             }
             c.setEventCode(eventCode);
 
-            String partitionS=data.substring(10, 12);
-            int partition=-1;
+            String userS=data.substring(10, 12);
+            int user=-1;
             try{
-                partition=Integer.parseInt(partitionS);
+                user=Integer.parseInt(userS);
             }catch(NumberFormatException e){
-                throw new ContactIDException("Could not parse partition string: "+partitionS);
+                throw new ContactIDException("Could not parse userID string: "+userS);
             }
-            c.setPartition(partition);
+            c.setUserID(user);
 
             String zoneS=data.substring(12, 15);
             int zone=-1;

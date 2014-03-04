@@ -16,6 +16,12 @@
         <activity android:name=".settings.SettingsActivity"
                   android:label="@string/action_settings">
         </activity>
+        <activity android:name=".settings.UserSettingsActivity"
+                  android:label="@string/user_settings">
+        </activity>
+        <activity android:name=".settings.SensorsSettingsActivity"
+                  android:label="@string/sensors_settings">
+        </activity>
         <activity android:name=".SMSDecoderActivity"
                   android:label="@string/decode_sms">
         </activity>

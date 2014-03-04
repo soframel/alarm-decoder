@@ -14,7 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import org.soframel.alarm.decoder.settings.SensorsSettingsActivity;
 import org.soframel.alarm.decoder.settings.SettingsActivity;
+import org.soframel.alarm.decoder.settings.UserSettingsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -164,6 +166,12 @@ public class AlarmDecoderActivity extends Activity {
             case R.id.action_settings:
                 showSettings();
                 return true;
+            case R.id.user_settings:
+                showUserSettings();
+                return true;
+            case R.id.sensors_settings:
+                showSensorSettings();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -172,7 +180,14 @@ public class AlarmDecoderActivity extends Activity {
     private void showSettings(){
         Intent i = new Intent(this, SettingsActivity.class);
         this.startActivity(i);
-        //this.startActivityForResult(i, 0);
+    }
+    private void showUserSettings(){
+        Intent i = new Intent(this, UserSettingsActivity.class);
+        this.startActivity(i);
+    }
+    private void showSensorSettings(){
+        Intent i = new Intent(this, SensorsSettingsActivity.class);
+        this.startActivity(i);
     }
 
     @Override

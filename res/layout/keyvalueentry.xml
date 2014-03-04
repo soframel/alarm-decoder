@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/KeyValueLayout"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:clickable="true" android:baselineAligned="true">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/user"
+                  android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:background="#000000"
+                  android:clickable="true">
+    <TextView
+            android:id="@+id/keyLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#FFFFFF" android:layout_gravity="center" android:layout_weight="2"
+            android:singleLine="true"
+            android:textSize="20sp"/>
+        <ImageButton android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_discard"
+                android:onClick="deleteEntry"
+                android:id="@+id/deleteEntry" android:layout_gravity="center|right"
+                />
+    </LinearLayout>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/gray_line" />
+
+    <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#FFFFFF"
+                android:id="@+id/keyView" android:layout_gravity="center_vertical|left" android:enabled="true"
+                android:editable="true"/>
+
+    <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:id="@+id/valueView" android:layout_gravity="center_vertical|left"/>
+
+
+
+</LinearLayout>
+
