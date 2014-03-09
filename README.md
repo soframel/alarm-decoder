@@ -15,3 +15,5 @@ The ContactID syntax recognized is based on 15 numbers followed by one letter, w
 - _ _: user
 - _ _ _: zone (sensor)
 - _: checksum (hexa)
+
+Warning: I only tested this app with one alarm system (Abus)...I hope it should work on other alarm systems using the same syntax, though.
