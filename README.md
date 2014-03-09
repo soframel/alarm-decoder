@@ -2,6 +2,7 @@ This is a simple android app to decode "encoded" SMSs sent by alarm systems that
 It displays SMS sent from a specific number, and decodes the ContactID according to predefined settings for:
 - ContactID event codes
 - Event kinds
+
 It uses user settings to decode:
 - user codes
 - sensor codes
