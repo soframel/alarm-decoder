@@ -5,11 +5,11 @@ It displays SMS sent from a specific number, and decodes them according to prede
 - sensor codes
 
 The ContactID syntax recognized is based on 15 numbers followed by one letter, which are:
-0: constant (?)
-_ _ _: owner of alarm
-18: syntax (should always be 18 for ContactID)
-_ : event kind
-_ _ _: ContactID event code
-_ _: user
-_ _ _: zone (sensor)
-_: checksum (hexa)
+- 0: constant (?)
+- _ _ _: owner of alarm
+- 18: syntax (should always be 18 for ContactID)
+- _ : event kind
+- _ _ _: ContactID event code
+- _ _: user
+- _ _ _: zone (sensor)
+- _: checksum (hexa)
