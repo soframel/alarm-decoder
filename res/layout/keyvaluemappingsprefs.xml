@@ -16,6 +16,12 @@
                  android:id="@+id/addEntry" android:layout_gravity="center|bottom|left"
                  android:onClick="addEntry"
             />
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/importFile"
+            android:id="@+id/button" android:layout_gravity="left|center_vertical" android:singleLine="false"
+            android:onClick="importFile"/>
 
 </LinearLayout>
 </ScrollView>

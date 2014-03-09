@@ -2,21 +2,30 @@ package org.soframel.alarm.decoder.settings;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.soframel.alarm.decoder.R;
 
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * User: sophie
  * Date: 4/3/14
  */
 public abstract class KeyValueMappingsPrefsActivity extends Activity {
+
+    private final static int OPEN_FILE_CODE=0;
 
     public final static String TAG="KeyValueMappingsPrefsActivity";
 
@@ -44,14 +53,12 @@ public abstract class KeyValueMappingsPrefsActivity extends Activity {
         //load settings
         Map<String,String> entries=(Map<String,String>) prefs.getAll();
         if(entries!=null && !entries.isEmpty()){
-            for(String key: entries.keySet()){
+            Set<String> keys=entries.keySet();
+            TreeSet<String> sortedKeys=new TreeSet<String>(keys);
+            for(String key: sortedKeys){
                 String value=entries.get(key);
                 this.doAddEntry(key, value);
             }
-        }
-        else{
-            //add one entry at the beginning
-            this.doAddEntry("", "");
         }
     }
 
@@ -123,4 +130,63 @@ public abstract class KeyValueMappingsPrefsActivity extends Activity {
         layout.removeView(entryView);
     }
 
+    public void importFile(View v){
+        // Create the text message with a string
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath());
+        intent.setDataAndType(uri, "text/plain");
+
+        // Verify that the intent will resolve to an activity
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            //startActivityForResult(Intent.createChooser(intent, "Open file"), OPEN_FILE_CODE);
+            startActivityForResult(intent, OPEN_FILE_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+           if(requestCode == OPEN_FILE_CODE && resultCode==Activity.RESULT_OK){
+               Log.d(TAG, "opened file " + data);
+               Uri uri=data.getData();
+               this.loadPropertiesFromFile(uri);
+           }
+    }
+
+    private void loadPropertiesFromFile(Uri uri){
+        FileReader reader=null;
+        Properties props=new Properties();
+        try {
+            reader=new FileReader(uri.getPath());
+            props.load(reader);
+            this.addData(props);
+        }
+        catch (FileNotFoundException e) {
+            Log.e(TAG, "FileNotFoundException for file "+uri);
+        }
+        catch (IOException e) {
+           Log.e(TAG, "Exception while reading properties from file");
+        }
+        finally{
+            if(reader!=null){
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Exception while closing FileReader");
+                }
+            }
+        }
+    }
+
+    private void addData(Properties props){
+          for(Object keyO: props.keySet()){
+              String key=(String) keyO;
+              String value=(String) props.get(key);
+              if(key!=null && value!=null){
+                  key=key.trim();
+                  value=value.trim();
+                  if(!key.equals("") && !value.equals(""))
+                    this.doAddEntry(key, value);
+              }
+          }
+    }
 }
